@@ -10,9 +10,11 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "yajra/laravel-datatables": "^10.1",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.15",
         "barryvdh/laravel-ide-helper": "^3.1",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.29",
@@ -28,7 +30,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files":
+         [
+            "app/Helpers/global_helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ProfilePasswordUpdateRequest;
 use App\Http\Requests\Admin\ProfileUpdateRequest;
+use App\Traits\fileuploadtriat;
 use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -11,31 +13,37 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-   function index() : View{
-    return view('admin.profile.index');
-   }
-//    function updateProfile(ProfileUpdateRequest $request) : RedirectResponse{
+    use fileuploadtriat;
+    function index(): View
+    {
+        return view('admin.profile.index');
+    }
+    function updateProfile(ProfileUpdateRequest $request): RedirectResponse
+    {
 
-//     $user = Auth::user();
+        $user = Auth::user();
+        $imagePath = $this->uploadImage($request, 'avatar');
 
-//     $user->name = $request->name;
-//     $user->email = $request->email;
-//     $user->save();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->avatar = isset($imagePath) ? $imagePath : $user->avatar;
+        $user->save();
 
-//     toastr('Updated Successfully','success');
+        toastr('Updated Successfully', 'success');
 
 
-//      return redirect()->back();
-//    }
+        return redirect()->back();
+    }
 
-   function updatePassword(ProfileUpdateRequest $request): RedirectResponse{
+    function updatePassword(ProfilePasswordUpdateRequest $request): RedirectResponse
+    {
 
-    $user = Auth::user();
-    $user->password = bcrypt($request->password);
-    $user->save();
+        $user = Auth::user();
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-    toastr('password change','success');
+        toastr('password change', 'success');
 
-    return redirect()->back();
-   }
+        return redirect()->back();
+    }
 }

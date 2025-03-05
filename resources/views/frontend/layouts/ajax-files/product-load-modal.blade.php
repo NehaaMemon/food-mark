@@ -1,0 +1,128 @@
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+    class="fal fa-times"></i></button>
+    <form action="">
+<div class="fp__cart_popup_img">
+<img src="{{ asset($product->thumb_image) }}" alt="{{ $product->name }}" class="img-fluid w-100">
+</div>
+<div class="fp__cart_popup_text">
+<a href="{{ route('product.show', $product->slug) }}" class="title">{!! $product->name !!}</a>
+<p class="rating">
+    <i class="fas fa-star"></i>
+    <i class="fas fa-star"></i>
+    <i class="fas fa-star"></i>
+    <i class="fas fa-star-half-alt"></i>
+    <i class="far fa-star"></i>
+    <span>(201)</span>
+</p>
+<h4 class="price">
+    @if ($product->offer_price > 0)
+    <input type="hidden" value="{{ $product->offer_price }}" name="base_price">
+    {{ currencyPosition($product->offer_price) }}
+    <del>{{ currencyPosition($product->price) }}</del>
+    @else
+    <input type="hidden" value="{{ $product->price }}" name="base_price">
+    {{ currencyPosition($product->price) }}
+    @endif
+
+</h4>
+@if ($product->productSizes()->exists())
+<div class="details_size">
+    <h5>select size</h5>
+    @foreach ($product->productSizes as $productSize)
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" data-price="{{ $productSize->price }}" value="{{ $productSize->id }}" name="product_size"
+            id="{{ $productSize->id }}" >
+        <label class="form-check-label" for="{{ $productSize->id }}">
+            {{ $productSize->name }} <span>+ {{ currencyPosition($productSize->price) }}</span>
+        </label>
+    </div>
+    @endforeach
+
+</div>
+
+@endif
+@if ($product->productOptions()->exists())
+<div class="details_extra_item">
+    <h5>select option <span>(optional)</span></h5>
+    @foreach ($product->productOptions as $productOption)
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="product_option[]" data-price="{{ $productOption->price }}" value="{{ $productOption->id }}" id="{{ $productOption->id }}">
+        <label class="form-check-label" for="{{ $productOption->id }}">
+            {{ $productOption->name }} <span>+ {{ currencyPosition($productOption->price) }}</span>
+        </label>
+    </div>
+    @endforeach
+
+</div>
+@endif
+
+
+<div class="details_quentity">
+    <h5>select quentity</h5>
+    <div class="quentity_btn_area d-flex flex-wrapa align-items-center">
+        <div class="quentity_btn">
+            <button class="btn btn-danger decrement "><i class="fal fa-minus"></i></button>
+            <input type="text" placeholder="1" id="quantity" value="1" readonly>
+            <button class="btn btn-success increment"><i class="fal fa-plus"></i></button>
+        </div>
+
+            @if ($product->offer_price > 0)
+            <h3 id="total_price"> {{ currencyPosition($product->offer_price )}}</h3>
+        @else
+        <h3 id="total_price"> {{ currencyPosition($product->price )}}</h3>
+            @endif
+
+    </div>
+</div>
+<ul class="details_button_area d-flex flex-wrap">
+    <li><a class="common_btn" href="#">add to cart</a></li>
+</ul>
+</div>
+    </form>
+    <script>
+        $(document).ready(function(){
+            $('input[name="product_size"]').on('change',function(){
+                updateProductPrice();
+            });
+            $(document).ready(function(){
+                $('input[name="product_option[]"]').on('change',function(){
+                    updateProductPrice();
+                });
+                $('.increment').on('click',function(e){
+                 e.preventDefault()
+                 let quantity = $('#quantity');
+                 let currentQuantity = parseFloat(quantity.val());
+                 quantity.val(currentQuantity + 1);
+
+                })
+                $('.decrement').on('click',function(e){
+                    e.preventDefault()
+                  let quantity = $('#quantity');
+                  let currentQuantity = parseFloat(quantity.val());
+                  if (currentQuantity > 1){
+                  quantity.val(currentQuantity - 1);
+                  }
+                })
+            })
+            //function to update Product Size on selected price//
+            function updateProductPrice(){
+                let basePrice = parseFloat($('input[name="base_price"]').val());
+                let productSizePrice = 0;
+                let productOptionPrice = 0;
+
+                //calculate selected price of product //
+                let sizePrice = $('input[name="product_size"]:checked');
+                if(sizePrice.length > 0 ){
+                    productSizePrice = parseFloat(sizePrice.data("price"));
+            }
+            let OptionPrice = $('input[name="product_option[]"]:checked');
+            $(OptionPrice).each(function(){
+                productOptionPrice = parseFloat($(this).data("price"));
+            })
+          let totalPrice = basePrice + productSizePrice + productOptionPrice;
+           $('#total_price').text("{{ config('settings.site_currency_icon') }}" + totalPrice);
+        }
+        })
+        </script>
