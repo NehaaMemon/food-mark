@@ -30,5 +30,13 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'jazzcash' => [
+    'merchant_id'    => env('JAZZCASH_MERCHANT_ID'),
+    'password'       => env('JAZZCASH_PASSWORD'),
+    'return_url'     => env('JAZZCASH_RETURN_URL'),
+    'integrity_salt' => env('JAZZCASH_INTEGRITY_SALT'),
+    'post_url'       => env('JAZZCASH_POST_URL'),
+],
+
 
 ];

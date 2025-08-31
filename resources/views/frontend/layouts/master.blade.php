@@ -19,11 +19,29 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}">
     <!-- <link rel="stylesheet" href="css/rtl.css"> -->
 </head>
 
 <body>
+      <!--=============================
+       Cart Popup start
+    ==============================-->
+    <div class="fp__cart_popup">
+        <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body product_load_modal_body">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <!--=============================
+         Cart Popup end
+    ==============================-->
+    {{-- @dd(Cart::content()); --}}
     <!--=============================
         TOPBAR START
     ==============================-->
@@ -62,6 +80,12 @@
     <div class="fp__scroll_btn">
         go to top
     </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <span class="loader"></span>
+        </div>
+    </div>
+
     <!--=============================
         SCROLL BUTTON END
     ==============================-->
@@ -95,6 +119,9 @@
     <script src="{{ asset('frontend/js/toastr.min.js') }}"></script>
     <!--main/custom js-->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    {{-- Sweet alert --}}
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         toastr.options.progressBar = true;
         @if ($errors->any())
@@ -102,11 +129,14 @@
                 toastr.error("{{ $error }}")
             @endforeach
         @endif
+
+        //add csrf at ajax header//
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        
     </script>
     @include('frontend.layouts.global_script')
     @stack('scripts')
