@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JazzCash Direct Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        form { margin: 20px auto; padding: 20px; border: 1px solid #ccc; width: 500px; text-align: left; }
+        input[type="hidden"] { display: block; margin-bottom: 5px; } /* For visualization in dev tools */
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        .important-note { color: red; font-weight: bold; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>JazzCash Direct Test Form</h1>
+    <p>This form will submit directly to JazzCash Sandbox with the data from your Laravel logs.</p>
+    <p class="important-note">DEBUG NOTE: Agar ye page load hota hai aur button click karne par bhi JazzCash ka page blank aata hai, to masla JazzCash credentials ya network access ka hai, aapke code ka nahi.</p>
+
+    <form id="jazzcashForm" method="POST" action="https://sandbox.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/">
+        <input type="hidden" name="pp_Version" value="2.0">
+        <input type="hidden" name="pp_TxnType" value="MPAY">
+        <input type="hidden" name="pp_Language" value="EN">
+        <input type="hidden" name="pp_MerchantID" value="MC222933">
+        <input type="hidden" name="pp_Password" value="ahv355b414">
+        <input type="hidden" name="pp_TxnRefNo" value="T17577507271095">
+        <input type="hidden" name="pp_Amount" value="4090">
+        <input type="hidden" name="pp_TxnCurrency" value="PKR">
+        <input type="hidden" name="pp_TxnDateTime" value="20250913130527">
+        <input type="hidden" name="pp_TxnExpiryDateTime" value="20250913140527">
+        <input type="hidden" name="pp_BillReference" value="order_172">
+        <input type="hidden" name="pp_Description" value="Order #172">
+        <input type="hidden" name="pp_ReturnURL" value="https://poor-shirts-admire.loca.lt">
+        <input type="hidden" name="pp_SecureHashType" value="SHA256">
+        <input type="hidden" name="pp_IsRegisteredCustomer" value="No">
+        <input type="hidden" name="pp_SecureHash" value="555a182266dfdb01dcde13244bacfd1779c56e40724c88e31eb946619b090134">
+
+        <button type="submit">Submit to JazzCash Sandbox</button>
+    </form>
+
+    <script>
+        // Aap is script ko uncomment kar sakte hain agar aap form ko automatically submit karna chahte hain.
+        // window.onload = function() {
+        //     setTimeout(function() {
+        //         document.getElementById('jazzcashForm').submit();
+        //     }, 1000); // 1 second (1000 milliseconds) ke baad submit hoga
+        // };
+    </script>
+</body>
+</html>
+</html>

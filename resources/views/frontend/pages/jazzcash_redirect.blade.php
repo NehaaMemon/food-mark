@@ -1,86 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Redirecting to JazzCash...</title></head>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting to JazzCash...</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .debug-data {
+            background:#f6f6f6;
+            padding:.5rem;
+            border:1px solid #ddd;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+            overflow-x: auto;
+        }
+        h3 { color: #333; }
+        .important-note { color: red; font-weight: bold; margin-top: 30px; }
+    </style>
+</head>
 <body onload="document.forms['jazzcash_form'].submit()">
     <h3>Redirecting to JazzCash — please wait...</h3>
+    <p class="important-note">DEBUG MODE: Neeche JazzCash ko bheja jaane wala data dikhaya ja raha hai. Agar koi masla hai to yahan check karen.</p>
 
-
-    <pre style="background:#f6f6f6;padding:.5rem;border:1px solid #ddd;">
+    <pre class="debug-data">
+Form Action: {{ config('jazzcash.environment') === 'sandbox' ? config('jazzcash.sandbox_url') : config('jazzcash.live_url') }}
 {{ print_r($data, true) }}
     </pre>
 
     <form name="jazzcash_form" method="POST"
-        action="https://sandbox.jazzcash.com.pk/CustomerPortal/TransactionManagement/MerchantForm/">
-
+        action="{{ config('jazzcash.environment') === 'sandbox' ? config('jazzcash.sandbox_url') : config('jazzcash.live_url') }}">
         @foreach($data as $k => $v)
             <input type="hidden" name="{{ $k }}" value="{{ $v }}">
         @endforeach
     </form>
 </body>
 </html>
-{{-- <!DOCTYPE html>
-<html>
-<head>
-    <title>JazzCash Sandbox Debugging</title>
-    <script>
-        function validateAndSubmit() {
-            let form = document.forms['jazzcash_form'];
-            let requiredFields = [
-                "pp_MerchantID",
-                "pp_Password",
-                "pp_TxnRefNo",
-                "pp_Amount",
-                "pp_TxnCurrency",
-                "pp_TxnDateTime",
-                "pp_ReturnURL",
-                "pp_SecureHash"
-            ];
-
-            for (let i = 0; i < requiredFields.length; i++) {
-                let field = form[requiredFields[i]];
-                if (!field || field.value.trim() === "") {
-                    alert("Missing or invalid field: " + requiredFields[i]);
-                    return false; // stop submission
-                }
-            }
-
-            // All good → submit form
-            form.submit();
-        }
-    </script>
-</head>
-<body>
-    <h2>JazzCash Sandbox Payment Debugging</h2>
-    <p><b>Sandbox URL:</b> {{ "https://sandbox.jazzcash.com.pk/CustomerPortal/TransactionManagement/MerchantForm/" }}</p>
-
-    <h3>Form Fields</h3>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <tr>
-            <th>Field</th>
-            <th>Value</th>
-        </tr>
-        @foreach($data as $key => $value)
-        <tr>
-            <td>{{ $key }}</td>
-            <td>{{ $value }}</td>
-        </tr>
-        @endforeach
-    </table>
-
-    <br>
-
-    <form name="jazzcash_form" method="POST" action="https://sandbox.jazzcash.com.pk/CustomerPortal/TransactionManagement/MerchantForm/">
-        @foreach($data as $key => $value)
-            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-        @endforeach
-        <button type="button" onclick="validateAndSubmit()">Submit to JazzCash Sandbox</button>
-    </form>
-
-    <p style="color: red;">
-        ⚠ Debug mode: Agar koi required field khali hoga to alert show hoga.
-        Sahi hone par hi sandbox page par redirect karega.
-    </p>
-</body>
-</html> --}}
-
-

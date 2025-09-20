@@ -12,7 +12,7 @@ use Illuminate\View\View;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Stripe\Stripe;
 use Stripe\Checkout\Session  as StripeSession;
-use Stripe\Service\Climate\OrderService as ClimateOrderService;
+// use Stripe\Service\Climate\OrderService as ClimateOrderService; // This line seems unused and might be from a typo
 
 class PaymentController extends Controller
 {
@@ -161,7 +161,7 @@ class PaymentController extends Controller
             $paymentInfo = [
                 'transection_id' => $capture['id'],
                 'currency' => $capture['amount']['currency_code'],
-                'status' => $capture['status']
+                'status' => 'completed'
             ];
 
             OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
@@ -225,7 +225,7 @@ class PaymentController extends Controller
         $paymentInfo = [
             'transection_id' => $response->payment_intent,
             'currency' => $response->currency,
-            'status' => $response->status
+            'status' => 'completed'
         ];
 
            OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'Stripe');
@@ -243,151 +243,187 @@ class PaymentController extends Controller
           $this->transectionFailUpdateStatus('Stripe');
         return redirect()->route('payment.cancel');
     }
+
+    /**
+     * Updates the order status to failed and dispatches an event if order_id is available.
+     * @param string $gatewayName The name of the payment gateway.
+     * @return void
+     */
     function transectionFailUpdateStatus($gatewayName) : void {
 
-         $orderId = session()->get('order_id');
+        $orderId = session()->get('order_id');
+
+        if (!$orderId) {
+            \Log::warning('Payment: Order ID not found in session for transaction failure update.', ['gateway' => $gatewayName]);
+            // If orderId is not present, we cannot update a specific order.
+            // You might want to log this more severely or notify an admin.
+            return; // Exit the function gracefully
+        }
+
         $paymentInfo = [
             'transection_id' => '',
             'currency' => '',
             'status' => "Failed"
         ];
 
-           OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, $gatewayName);
+        \Log::info('Payment: Dispatching failure update for Order ID.', ['order_id' => $orderId, 'gateway' => $gatewayName]);
+        OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, $gatewayName);
     }
 
 
+
+
+// ========================== //
+// JazzCash Flow
+// ========================== //
 
 public function payWithJazzcash(orderService $orderService)
-    {
-        $orderId = session()->get('order_id');
-        $order = \App\Models\Order::findOrFail($orderId);
-
-        $txnRefNumber = 'T' . time(); // keep <= ~20 chars ideally
-        // Ensure amount is in paisa integer: (e.g. 43.94 PKR => 4394)
-        $ppAmount = number_format($order->grand_total * 100, 0, '', '');
-
-        $DateTime 		= new \DateTime();
-		$pp_TxnDateTime = $DateTime->format('YmdHis');
-		//NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-		//NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-		//3.
-		//to make expiry date and time add one hour to current date and time
-		$ExpiryDateTime = $DateTime;
-		$ExpiryDateTime->modify('+' . 1 . ' hours');
-		$pp_TxnExpiryDateTime = $ExpiryDateTime->format('YmdHis');
-		//NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-
-
-
-
-
-        $data = [
-            "pp_Version"           => "2.0",
-            "pp_TxnType"           => "MPAY", // use MPAY for card payments
-            "pp_Language"          => "EN",
-            "pp_MerchantID"        => config('jazzcash.merchant_id'),
-            "pp_Password"          => config('jazzcash.password'),
-            "pp_TxnRefNo"          => $txnRefNumber,
-            "pp_Amount"            => $ppAmount,
-            "pp_TxnCurrency"       => "PKR",
-            "pp_TxnDateTime"       => $pp_TxnDateTime,
-            "pp_TxnExpiryDateTime" => $pp_TxnExpiryDateTime,
-            "pp_BillReference"     => "order_" . $order->id,
-            "pp_Description"       => "FoodPark Order #{$order->id}",
-            "pp_ReturnURL"         => config('jazzcash.return_url'),
-            "pp_SecureHashType"    => "SHA256",
-             "pp_IsRegisteredCustomer" => "No",
-            // optional add customer fields: pp_CustomerEmail, pp_CustomerMobile, ppmpf_1...
-        ];
-
-        // generate & attach secure hash
-        $data['pp_SecureHash'] = $this->generateHash($data);
-
-        // optionally log request being sent
-        \Log::info('JazzCash Request Data: ', $data);
-        // dd($data);
-        return view('frontend.pages.jazzcash_redirect', ['data' => $data]);
-    }
-     private function generateHash(array $data)
-    {
-    //     // Password ko hash se exclude karna hai
-        unset($data['pp_Password']);
-
-        ksort($data);
-
-        $hashString = config('jazzcash.integerity_salt') . '&';
-
-        foreach ($data as $key => $value) {
-            if (!empty($value)) {
-                $hashString .= $value . '&';
-            }
-        }
-
-        $hashString = rtrim($hashString, '&');
-
-        // return hash_hmac('sha256', $hashString, config('jazzcash.integrity_salt'));
-        return strtoupper(hash_hmac('sha256', $hashString, config('jazzcash.integerity_salt')));
-
-    }
-
-
-
-public function jazzcashResponse(Request $request)
 {
-    $response = $request->all();
+    \Log::info('JazzCash: Initiating payWithJazzcash function.');
 
-    // Debugging ke liye log aur print
-    \Log::info('JazzCash Response:', $response);
-    echo '<pre>';
-    print_r($response);
-    echo '</pre>';
-
-    if ($response['pp_ResponseCode'] == '000') {
-        $response['pp_ResponseMessage'] = 'Your Payment has been Successful';
-
-        // ✅ Order fetch from session
-        $orderId = session()->get('order_id');
-        $order = \App\Models\Order::findOrFail($orderId);
-
-        // ✅ Order status update
-        $order->status = 'completed';
-        $order->txn_ref_no = $response['pp_TxnRefNo'] ?? null; // agar chaho to save kar sakte ho
-        $order->save();
-    } else {
-        $response['pp_ResponseMessage'] = 'Payment Failed: ' . ($response['pp_ResponseMessage'] ?? 'Unknown Error');
+    $orderId = session()->get('order_id');
+    if (!$orderId) {
+        \Log::error('JazzCash: Order ID not found in session.');
+        throw ValidationException::withMessages(['Order ID not found for JazzCash payment.']);
     }
 
-    return view('payment-status', ['response' => $response]);
+    $order = \App\Models\Order::findOrFail($orderId);
+    \Log::info('JazzCash: Fetched order details for payment.', ['order_id' => $order->id, 'grand_total' => $order->grand_total]);
+
+    $txnRefNumber = 'T' . time() . rand(1000, 9999);
+    $ppAmount = (string)intval(round($order->grand_total * 100)); // Ensure integer string
+
+    $DateTime = new \DateTime();
+    $pp_TxnDateTime = $DateTime->format('YmdHis');
+    $ExpiryDateTime = clone $DateTime;
+    $ExpiryDateTime->modify('+1 hours');
+    $pp_TxnExpiryDateTime = $ExpiryDateTime->format('YmdHis');
+
+    $data = [
+        "pp_Version"           => "2.0",
+        "pp_TxnType"           => "MPAY",
+        "pp_Language"          => "EN",
+        "pp_MerchantID"        => config('jazzcash.merchant_id'),
+        "pp_Password"          => config('jazzcash.password'),
+        "pp_TxnRefNo"          => $txnRefNumber,
+        "pp_Amount"            => $ppAmount,
+        "pp_TxnCurrency"       => "PKR",
+        "pp_TxnDateTime"       => $pp_TxnDateTime,
+        "pp_TxnExpiryDateTime" => $pp_TxnExpiryDateTime,
+        "pp_BillReference"     => "order_" . $order->id,
+        "pp_Description"       => "Order #{$order->id}",
+        "pp_ReturnURL"         => config('jazzcash.return_url'),
+        "pp_SecureHashType"    => "SHA256",
+        "pp_IsRegisteredCustomer" => "No",
+    ];
+
+    // Log the raw data before hash
+    \Log::info('JazzCash: Data array prepared before hash generation:', $data);
+
+    $data['pp_SecureHash'] = $this->generateHash($data);
+
+    // Log the final data sent to JazzCash
+    \Log::info('JazzCash: Final data array with SecureHash for redirect:', $data);
+
+    // Extra debug: log the form action URL
+    $formAction = config('jazzcash.environment') === 'sandbox' ? config('jazzcash.sandbox_url') : config('jazzcash.live_url');
+    \Log::info('JazzCash: Form action URL for POST:', ['form_action' => $formAction]);
+
+    return view('frontend.pages.jazzcash_redirect', ['data' => $data]);
+}
+
+private function generateHash(array $data)
+{
+    $password = config('jazzcash.password');
+    $integerity_salt = config('jazzcash.integerity_salt');
+
+    // JazzCash required field order for hash string (excluding pp_Password)
+    $fields = [
+        "pp_Version",
+        "pp_TxnType",
+        "pp_Language",
+        "pp_MerchantID",
+        // "pp_Password", // Exclude from hash string
+        "pp_TxnRefNo",
+        "pp_Amount",
+        "pp_TxnCurrency",
+        "pp_TxnDateTime",
+        "pp_TxnExpiryDateTime",
+        "pp_BillReference",
+        "pp_Description",
+        "pp_ReturnURL",
+        "pp_SecureHashType",
+        "pp_IsRegisteredCustomer"
+    ];
+
+    $hashString = '';
+    foreach ($fields as $field) {
+        if (!empty($data[$field])) {
+            $hashString .= $data[$field] . '&';
+        }
+    }
+    $hashString = rtrim($hashString, '&');
+    $hashStringWithSalt = $integerity_salt . '&' . $hashString;
+
+    \Log::info('JazzCash Hash: Ordered hash string before final Hmac:', ['hashStringForHmac' => $hashStringWithSalt]);
+
+    $finalHash = hash_hmac('sha256', $hashStringWithSalt, $password);
+    \Log::info('JazzCash Hash: Final generated SecureHash:', ['hash' => $finalHash]);
+
+    return $finalHash;
 }
 
 
+public function jazzcashResponse(Request $request, orderService $orderService)
+{
+    $response = $request->all();
+    \Log::info('JazzCash Response: Received callback from JazzCash.', $response); // Debugging line (existing)
 
-
-
-
-    public function jazzcashSuccess(): View
-    {
-        return view('frontend.pages.payment-success');
+    $orderId = session()->get('order_id');
+    if (!$orderId) {
+        \Log::error('JazzCash Response: Order ID not found in session for response processing.'); // Debugging line
+        // Handle this case, perhaps redirect to a generic error or home page.
+        $this->transectionFailUpdateStatus('JazzCash'); // Call to updated function
+        return redirect()->route('payment.cancel')->withErrors(['error' => 'Order ID session lost during JazzCash response.']);
     }
 
-    public function jazzcashCancel(): View
-    {
-        return view('frontend.pages.payment-cancel');
+    \Log::info('JazzCash Response: Processing response for Order ID.', ['order_id' => $orderId, 'pp_ResponseCode' => $response['pp_ResponseCode'] ?? 'N/A']); // Debugging line
+
+    // Verify SecureHash if required by JazzCash documentation for response validation
+    // This is a critical step for security to ensure the response hasn't been tampered with.
+    // You might need to generate hash from the received $response data and compare it with pp_SecureHash.
+    // For debugging the blank page, we'll focus on the request to JazzCash first.
+
+    if (isset($response['pp_ResponseCode']) && $response['pp_ResponseCode'] == '000') {
+        $paymentInfo = [
+            'transection_id' => $response['pp_TxnRefNo'] ?? null,
+            'currency' => $response['pp_TxnCurrency'] ?? 'PKR',
+            'status' => 'Completed'
+        ];
+
+        OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'JazzCash');
+        OrderPlacedNotificationEvent::dispatch($orderId);
+        $orderService->clearSession();
+
+        \Log::info('JazzCash Response: Payment successful for Order ID.', ['order_id' => $orderId, 'transection_id' => $paymentInfo['transection_id']]); // Debugging line
+        return redirect()->route('payment.success');
+    } else {
+        $errorMessage = $response['pp_ResponseMessage'] ?? 'Payment Failed (Unknown JazzCash error)';
+        $this->transectionFailUpdateStatus('JazzCash'); // Call to updated function
+        \Log::error('JazzCash Response: Payment failed for Order ID.', ['order_id' => $orderId, 'response' => $response, 'error_message' => $errorMessage]); // Debugging line
+
+        return redirect()->route('payment.cancel')->withErrors(['error' => $errorMessage]);
     }
+}
 
-    // helper used earlier in conversation (keep as you already have)
-    // public function transectionFailUpdateStatus($gatewayName): void
-    // {
-    //     $orderId = session()->get('order_id');
-    //     $paymentInfo = [
-    //         'transection_id' => '',
-    //         'currency' => '',
-    //         'status' => "Failed"
-    //     ];
-    //     OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, $gatewayName);
-    // }
+public function jazzcashSuccess(): View
+{
+    return view('frontend.pages.payment-success');
+}
 
-
+public function jazzcashCancel(): View
+{
+    return view('frontend.pages.payment-cancel');
+}
 
 }

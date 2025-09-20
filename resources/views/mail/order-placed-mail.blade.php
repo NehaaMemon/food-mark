@@ -177,8 +177,8 @@ For what reason would it be advisable for me to think about business content? Th
                                     <tr>
                                         <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
                                             <p style="font-weight: 800;text-align:left !important">Estimated Delivery Date</p>
-                                            <p>{{ @$order->deliveryArea->max_delivery_area }} -
-                                                {{ @$order->deliveryArea->min_delivery_area }}
+                                            <p>{{ @$order->address->deliveryArea->max_delivery_area }} -
+                                                {{ @$order->address->deliveryArea->min_delivery_area }}
                                             </p>
                                         </td>
                                     </tr>
