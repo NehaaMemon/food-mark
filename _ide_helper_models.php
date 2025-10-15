@@ -16,6 +16,40 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $user_id
+ * @property int $delivery_area_id
+ * @property string $first_name
+ * @property string|null $last_name
+ * @property string $email
+ * @property string $phone
+ * @property string $address
+ * @property string $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\DeliveryArea $deliveryArea
+ * @method static \Illuminate\Database\Eloquent\Builder|Address newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Address newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Address query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereDeliveryAreaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereUserId($value)
+ */
+	class Address extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $slug
  * @property int $status
@@ -42,6 +76,173 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property string $code
+ * @property int $quantity
+ * @property int $min_purchase_amount
+ * @property string $expiry_date
+ * @property string $discount_type
+ * @property float $discount
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\CouponFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereDiscountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereExpiryDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMinPurchaseAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
+ */
+	class Coupon extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $area_name
+ * @property string $min_delivery_area
+ * @property string $max_delivery_area
+ * @property float $delivery_fee
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereAreaName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereDeliveryFee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereMaxDeliveryArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereMinDeliveryArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeliveryArea whereUpdatedAt($value)
+ */
+	class DeliveryArea extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $invoice_id
+ * @property int $user_id
+ * @property string $address
+ * @property float $discount
+ * @property float $delivery_charge
+ * @property float $subtotal
+ * @property float $grand_total
+ * @property int $product_qty
+ * @property string|null $payment_method
+ * @property string $payment_status
+ * @property string|null $payment_approve_date
+ * @property string|null $transection_id
+ * @property string|null $coupon_info
+ * @property string|null $currency_name
+ * @property string $order_status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $address_id
+ * @property-read \App\Models\DeliveryArea|null $deliveryArea
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
+ * @property-read int|null $order_items_count
+ * @property-read \App\Models\User $user
+ * @property-read \App\Models\Address|null $userAddress
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereAddressId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereCurrencyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeliveryCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereGrandTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentApproveDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereProductQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereSubtotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereTransectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ */
+	class Order extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $order_id
+ * @property string $product_name
+ * @property int $product_id
+ * @property float $unit_price
+ * @property int $qty
+ * @property string|null $product_size
+ * @property string|null $product_option
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereProductName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereProductOption($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereProductSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUnitPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
+ */
+	class OrderItem extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $key
+ * @property string|null $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentGatewaySetting whereValue($value)
+ */
+	class PaymentGatewaySetting extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name
  * @property string $slug
  * @property string $thumb_image
  * @property int $category_id
@@ -50,6 +251,7 @@ namespace App\Models{
  * @property string|null $sku
  * @property float $price
  * @property float $offer_price
+ * @property int|null $quantity
  * @property string|null $seo_title
  * @property string|null $seo_description
  * @property int $show_at_home
@@ -74,6 +276,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereOfferPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSeoDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereSeoTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereShortDescription($value)
@@ -152,27 +355,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Productoption whereUpdatedAt($value)
  */
 	class Productoption extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * 
- *
- * @property int $id
- * @property string $key
- * @property string|null $value
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Setting newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Setting newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Setting query()
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereValue($value)
- */
-	class Setting extends \Eloquent {}
 }
 
 namespace App\Models{

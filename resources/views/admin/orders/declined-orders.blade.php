@@ -2,11 +2,11 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Orders</h1>
+            <h1>Declined Orders</h1>
         </div>
         <div class="card card-primary">
             <div class="card-header">
-                <h4>All Orders</h4>
+                <h4>All Declined Orders</h4>
 
             </div>
             <div class="card-body">
@@ -111,7 +111,7 @@
                     data: formContent,
                     success:function(response){
                         $('#order_modal').modal("hide");
-                        $('#order-table').DataTable().draw();
+                        $('#pendingorder-table').DataTable().draw();
                         toastr.success(response.message);
                     },
                     error:function(xhr,status,error){
