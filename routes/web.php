@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\RTOrderPlacedNotificationEvent;
 use App\Http\Controllers\Admin\AdminAuthController;
 // use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -120,6 +121,6 @@ Route::get('jazzcash/cancel', [PaymentController::class, 'jazzcashCancel'])->nam
 
 
     Route::get('test',function(){
-        return view('mail.order-placed-mail');
+       RTOrderPlacedNotificationEvent::dispatch('hello there');
     });
 });

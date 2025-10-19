@@ -5604,7 +5604,7 @@ CHECKOUT PAGE START
 }
 
 .fp__track_order ul li {
-    width: 20%;
+    width: 33%;
     position: relative;
     font-size: 16px;
     font-weight: 500;
@@ -5667,6 +5667,15 @@ CHECKOUT PAGE START
 
 .fp__track_order ul li.active::after {
     background: #4caf50;
+}
+
+.fp__track_order ul li.declined_status::after {
+    background: #e12d36 !important;
+}
+
+.fp__track_order ul li.declined_status::before {
+    background: #e12d36 !important;
+    color: var(--colorWhite);
 }
 
 .fp__track_order ul li.active::before {

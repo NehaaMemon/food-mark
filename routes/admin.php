@@ -64,18 +64,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     Route::get('pending-orders', [OrderController::class, 'pendingOrders'])->name('pending-orders');
-    Route::get('inprocess-orders', [OrderController::class, 'inProcessOrders'])->name('inprocess-orders');
-    Route::get('delivered-orders', [OrderController::class, 'DeliveredOrders'])->name('delivered-orders');
-    Route::get('declined-orders', [OrderController::class, 'DeclinedOrders'])->name('declined-orders');
-    
-    Route::get('/orders/status/{id}', [OrderController::class, 'getOrderStatus'])->name('orders.status');
-    Route::put('/orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])->name('orders.status-update');
+    Route::get('inprocess-orders', [OrderController::class, 'inProcessOrders'])
+    ->name('inprocess-orders');
+    Route::get('delivered-orders', [OrderController::class, 'DeliveredOrders'])
+    ->name('delivered-orders');
+    Route::get('declined-orders', [OrderController::class, 'DeclinedOrders'])
+    ->name('declined-orders');
+
+    Route::get('/orders/status/{id}', [OrderController::class, 'getOrderStatus'])
+    ->name('orders.status');
+    Route::put('/orders/status-update/{id}', [OrderController::class, 'orderStatusUpdate'])
+    ->name('orders.status-update');
 
     //Payment Gateway Setting//
-    Route::get('/payment-gateway-setting', [PaymentGatewaySettingController::class, 'index'])->name('payment-setting.index');
-    Route::put('/paypal-setting', [PaymentGatewaySettingController::class, 'paypalSettingUpdate'])->name('paypal-setting.update');
-    Route::put('/stripe-setting', [PaymentGatewaySettingController::class, 'stripeSettingUpdate'])->name('stripe-setting.update');
-    Route::put('/jazzcash-setting', [PaymentGatewaySettingController::class, 'jazzcashSettingUpdate'])->name('jazzcash-setting.update');
+    Route::get('/payment-gateway-setting', [PaymentGatewaySettingController::class, 'index'])
+    ->name('payment-setting.index');
+    Route::put('/paypal-setting', [PaymentGatewaySettingController::class, 'paypalSettingUpdate'])
+    ->name('paypal-setting.update');
+    Route::put('/stripe-setting', [PaymentGatewaySettingController::class, 'stripeSettingUpdate'])
+    ->name('stripe-setting.update');
+    Route::put('/jazzcash-setting', [PaymentGatewaySettingController::class, 'jazzcashSettingUpdate'])
+    ->name('jazzcash-setting.update');
 
 
     // stripe email
@@ -83,5 +92,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     // John@@7272
     //Setting Routes //
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
-    Route::put('/general-setting', [SettingController::class, 'UpdateGeneralSetting'])->name('general-setting.update');
+    Route::put('/general-setting', [SettingController::class, 'UpdateGeneralSetting'])
+    ->name('general-setting.update');
+    Route::put('/pusher-setting', [SettingController::class, 'UpdatePusherSetting'])
+    ->name('pusher-setting.update');
 });

@@ -100,7 +100,7 @@
 
                                             $proqty = $orderItem->qty;
                                             $proPrice = $orderItem->unit_price;
-                                            $proSize = $size->price;
+                                            $proSize = $size->price ?? 0;
                                             $proOption = 0;
                                             foreach ($option as $optionItem) {
                                                 $proOption += $optionItem->price;
@@ -204,7 +204,7 @@
             printWindow.print();
             printWindow.close();
 
-          
+
 
         })
 
