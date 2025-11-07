@@ -72,6 +72,35 @@
     }
      })
     }
+
+    //wishlist Function//
+
+        function addToWishlist(productId){
+     $.ajax
+     ({
+        method :'get',
+        url : '{{ route("wishlist.store", ":productId") }}'.replace(':productId',productId),
+        beforeSend: function(){
+            showLoader()
+            },
+        success : function(response)
+        {
+            toastr.success(response.message);
+        },
+        error: function(xhr,status,error) {
+            let errors = xhr.responseJSON.errors;
+            $.each(errors , function(index , value){
+                toastr.error(value);
+                hideLoader()
+            })
+            // console.error(error);
+        },
+        complete: function(){
+            hideLoader()
+
+    }
+     })
+    }
     //update sidebar cart //
     function updateSidebarCart(callback = null){
         $.ajax

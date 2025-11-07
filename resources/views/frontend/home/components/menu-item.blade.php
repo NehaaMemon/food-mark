@@ -3,11 +3,9 @@
         <div class="row wow fadeInUp" data-wow-duration="1s">
             <div class="col-md-8 col-lg-7 col-xl-6 m-auto text-center">
                 <div class="fp__section_heading mb_45">
-                    <h4>food Menu</h4>
-                    <h2>Our Popular Delicious Foods</h2>
-                    <span>
-                        <img src="images/heading_shapes.png" alt="shapes" class="img-fluid w-100">
-                    </span>
+                    <h4><i class="fas fa-utensils icon"></i> food Menu</h4>
+                     <h2 style="color: black;">Our Popular Delicious Foods</h2>
+
                     <p>Objectively pontificate quality models before intuitive information. Dramatically
                         recaptiualize multifunctional materials.</p>
                 </div>
@@ -34,6 +32,8 @@
                 $products = \App\Models\Product::where(['show_at_home' => 1 , 'status' => 1 , 'category_id' => $category->id])
                 ->orderby('id','desc')
                 ->take(8)
+                ->withAvg('reviews','rating')
+                ->withCount('reviews')
                 ->get();
 
             @endphp
@@ -43,17 +43,19 @@
                 <div class="fp__menu_item">
                     <div class="fp__menu_item_img">
                         <img src="{{ $product->thumb_image }}" alt="{{ $product->name }}" class="img-fluid w-100">
-                        <a class="category" href="#">{{ @$product->category->name }}</a>
+                        <a class="category" href="{{ route('product.show',$product->slug) }}">{{ @$product->category->name }}</a>
                     </div>
                     <div class="fp__menu_item_text">
+                        @if ($product->reviews_avg_rating)
                         <p class="rating">
+                            @for ($i = 1; $i <= $product->reviews_avg_rating; $i++)
                             <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <i class="far fa-star"></i>
-                            <span>10</span>
+                            @endfor
+
+                            <span>({{ $product->reviews_count }})</span>
                         </p>
+
+                        @endif
                         <a class="title" href="{{ route('product.show',$product->slug) }}">{{ $product->name }}</a>
                         <h5 class="price">
                             @if ($product->offer_price > 0)
@@ -65,9 +67,9 @@
                         </h5>
                         <ul class="d-flex flex-wrap justify-content-center">
                             <li><a href="javascript:;" onclick="loadProductModal('{{ $product->id }}')"><i
-                                        class="fas fa-shopping-basket"></i></a></li>
-                            <li><a href="#"><i class="fal fa-heart"></i></a></li>
-                            <li><a href="#"><i class="far fa-eye"></i></a></li>
+                                class="fas fa-shopping-basket"></i></a></li>
+                            <li><a href="javascript:;" onclick="addToWishlist('{{ $product->id }}')"><i class="fal fa-heart"></i></a></li>
+                            <li><a href="{{ route('product.show',$product->slug) }}"><i class="far fa-eye"></i></a></li>
                         </ul>
                     </div>
                 </div>

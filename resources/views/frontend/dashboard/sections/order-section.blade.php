@@ -34,7 +34,7 @@
                                 @endif
                             </td>
                             <td>
-                                <h5>{{ $order->grand_total }}</h5>
+                                <h5>{{ currencyPosition($order->grand_total) }}</h5>
                             </td>
                             <td><a class="view_invoice" onclick="viewInvoice('{{ $order->id }}')">View Details</a></td>
                         </tr>
@@ -53,7 +53,7 @@
             <div class="fp__track_order d-print-none">
                 <ul>
                     @if ($order->order_status === 'declined')
-                    <li class=
+                    <li  class=
 
                     "declined_status {{ in_array($order->order_status,['declined']) ? 'active' : '' }}"
                     >Order Declined</li>
@@ -120,10 +120,10 @@
                                 <td class="package">
                                     <p>{{ @$item->product_name }}</p>
                                     <span class="size">{{ @$size->name}} - {{ @$size->price
-                                    ?  currencyPosition(@$size->price) : '' }}</span>
+                                    ?  currencyPosition(@$size->price) : '' }}|</span>
                                     @foreach ($option as $options)
 
-                                    <span class="coca_cola">{{ @$options->name }}  - {{ $options->price ? currencyPosition($options->price) : '' }}</span>
+                                    <span class="coca_cola">{{ @$options->name }}  - {{ @$options->price ? currencyPosition(@$options->price) : '' }}</span>
                                     @endforeach
 
                                 </td>

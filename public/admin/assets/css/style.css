@@ -1501,7 +1501,7 @@ h6 .badge {
 
 /* 3.18 Navbar */
 .navbar {
-  height: 70px;
+  height: 50px !important;
   left: 250px;
   right: 5px;
   position: absolute;
@@ -2810,3 +2810,4 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
     }
 
 /*# sourceMappingURL=style.css.map */
+

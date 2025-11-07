@@ -4,15 +4,20 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\DailyOfferController;
 use App\Http\Controllers\Admin\DeliveryAreaController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentGatewaySettingController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductGalleryController;
 use App\Http\Controllers\Admin\ProductOptionController;
+use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ReservationController;
+use App\Http\Controllers\Admin\ReservationTimeController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\WhyChooseUsController;
@@ -51,6 +56,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
     //product Option Routes//
     Route::resource('product-option', ProductOptionController::class);
+
+     //product Reviews Routes//
+    Route::get('product-review', [ProductReviewController::class,'index'])->name('product-review.index');
+    Route::post('product-review', [ProductReviewController::class,'updateStatus'])->name('product-review.update');
+    Route::delete('product-review/{id}', [ProductReviewController::class,'destroy'])->name('product-review.destroy');
+
+
 
     //Coupon Routes//
     Route::resource('coupon', CouponController::class);
@@ -91,9 +103,37 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     // dawog80553@efpaper.com
     // John@@7272
     //Setting Routes //
+
+     //Reservation Time Routes//
+     Route::resource('reservation-time',ReservationTimeController::class);
+     Route::get('reservation',[ReservationController::class,'index'])
+     ->name('reservation.index');
+     Route::post('reservation',[ReservationController::class,'update'])
+     ->name('reservation.update');
+      Route::delete('reservation/{id}',[ReservationController::class,'destroy'])
+     ->name('reservation.destroy');
+
+    //Order Placed Notification Routes//
+    Route::get('clear-notification',[AdminDashboardController::class,'clearNotification'])
+    ->name('clear-notification');
+
+    //DailyOffer Routes//
+    Route::get('daily-offer/search-product', [DailyOfferController::class,'productSearch'])
+    ->name('daily-offer.search-product');
+    Route::resource('daily-offer', DailyOfferController::class);
+
+
+
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/general-setting', [SettingController::class, 'UpdateGeneralSetting'])
     ->name('general-setting.update');
     Route::put('/pusher-setting', [SettingController::class, 'UpdatePusherSetting'])
     ->name('pusher-setting.update');
+     Route::put('/mail-setting', [SettingController::class, 'UpdateMailSetting'])
+    ->name('mail-setting.update');
+      Route::put('/seo-setting', [SettingController::class, 'UpdateSeoSetting'])
+    ->name('seo-setting.update');
+
+
+
 });

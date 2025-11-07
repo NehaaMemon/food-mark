@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Setting;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+       Paginator::useBootstrap();
         $keys = ['pusher_key', 'pusher_secret', 'pusher_app_id', 'pusher_cluster'];
         $pusherConf = Setting::whereIn('key',$keys)->pluck('value','key');
 

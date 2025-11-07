@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Services\SettingServices;
+use Cache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,6 +14,7 @@ class SettingController extends Controller
 {
     function index(): View
     {
+
         return view('admin.setting.index');
     }
     function UpdateGeneralSetting(Request $request)
@@ -53,4 +55,51 @@ class SettingController extends Controller
         toastr()->success('Updated Successfully');
         return redirect()->back();
     }
+
+    function updateMailSetting(Request $request) : RedirectResponse {
+          $validatedData = $request->validate([
+            'mail_driver' => ['required'],
+            'mail_host' => ['required'],
+            'mail_port' => ['required'],
+            'mail_username' => ['required'],
+            'mail_password' => ['required'],
+            'mail_encryption' => ['required'],
+            'mail_form_address' => ['required'],
+            'mail_receive_address' => ['required']
+        ]);
+        foreach ($validatedData as $key => $value) {
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+        $settingService = app(SettingServices::class);
+        $settingService->ClearCachedSettings();
+
+        Cache::forget('mail_settings');
+        toastr()->success('Created Successfully!');
+        return redirect()->back();
+
+    }
+
+        function UpdateSeoSetting(Request $request)
+    {
+        $validatedData = $request->validate([
+            'seo' => ['required', 'max:255'],
+            'seo_description' => ['nullable', 'max:600'],
+            'seo_keywords' => ['nullable'],
+        ]);
+        foreach ($validatedData as $key => $value) {
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+        $settingService = app(SettingServices::class);
+        $settingService->ClearCachedSettings();
+        Cache::forget('mail_settings');
+        toastr()->success('Updated Successfully');
+        return redirect()->back();
+    }
+
 }

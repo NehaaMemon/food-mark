@@ -13,9 +13,9 @@
                 <div class="fp__breadcrumb_text">
                     <h1>sign up</h1>
                     <ul>
-                        <li><a href="index.html"><i class="fas fa-home" aria-hidden="true"></i>
+                        <li><a href="{{ route('/') }}"><i class="fas fa-home" aria-hidden="true"></i>
                             home</a></li>
-                        <li><a href="#">sign up</a></li>
+                        <li><a href="javascript:;">sign up</a></li>
                     </ul>
                 </div>
             </div>

@@ -1,17 +1,17 @@
 <section class="fp__download mt_100 xs_mt_70">
-    <div class="fp__download_bg" style="background: url(images/download_bg.jpg);">
+    <div class="fp__download_bg" style="background: url({{ asset('frontend/images/download_bg.jpg') }});">
         <div class="fp__download_overlay">
             <div class="container">
                 <div class="row justify-content-between">
                     <div class="col-xl-5 col-md-6 wow fadeInUp" data-wow-duration="1s">
                         <div class="fp__download_img">
-                            <img src="images/download_img.png" alt="download" class="img-fluid w-100">
+                            <img src="{{ asset('frontend/images/mobile.png') }}" alt="download" class="img-fluid w-100">
                         </div>
                     </div>
                     <div class="col-xl-6 col-md-6 wow fadeInUp" data-wow-duration="1s">
                         <div class="fp__download_text">
                             <div class="fp__section_heading mb_25">
-                                <h2>download our mobile apps</h2>
+                                <h2 style="color: black">Download our Mobile Apps</h2>
                                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque assumenda
                                     tenetur,
                                     provident earum consequatur, ut voluptas laboriosam fuga error aut eaque

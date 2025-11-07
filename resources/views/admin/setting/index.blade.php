@@ -14,29 +14,31 @@
                     <div class="col-12 col-sm-12 col-md-2">
                       <ul class="nav nav-pills flex-column" id="myTab4" role="tablist">
                         <li class="nav-item">
-                          <a class="nav-link active" id="home-tab4" data-toggle="tab" href="#general-setting" role="tab" aria-controls="home" aria-selected="true">General Setting</a>
+                          <a class="nav-link active" id="" data-toggle="tab" href="#general-setting" role="tab" aria-controls="home" aria-selected="true">General Setting</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" id="profile-tab4" data-toggle="tab" href="#pusher-setting" role="tab" aria-controls="profile" aria-selected="false">Pusher Setting</a>
+                          <a class="nav-link" id="" data-toggle="tab" href="#pusher-setting" role="tab" aria-controls="profile" aria-selected="false">Pusher Setting</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" id="contact-tab4" data-toggle="tab" href="#contact4" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+                          <a class="nav-link" id="" data-toggle="tab" href="#mail-setting" role="tab" aria-controls="contact" aria-selected="false">Mail Setting</a>
+                        </li>
+                            <li class="nav-item">
+                          <a class="nav-link" id="" data-toggle="tab" href="#seo-setting" role="tab" aria-controls="contact" aria-selected="false">SEO Setting</a>
                         </li>
                       </ul>
                     </div>
                     <div class="col-12 col-sm-12 col-md-10">
                       <div class="tab-content no-padding" id="myTab2Content">
 
-                        @include('admin.setting.section.general-setting')
+                         @include('admin.setting.section.general-setting')
 
                           @include('admin.setting.section.pusher-setting')
 
-                        <div class="tab-pane fade" id="profile4" role="tabpanel" aria-labelledby="profile-tab4">
-                          Sed sed metus vel lacus hendrerit tempus. Sed efficitur velit tortor, ac efficitur est lobortis quis. Nullam lacinia metus erat, sed fermentum justo rutrum ultrices. Proin quis iaculis tellus. Etiam ac vehicula eros, pharetra consectetur dui. Aliquam convallis neque eget tellus efficitur, eget maximus massa imperdiet. Morbi a mattis velit. Donec hendrerit venenatis justo, eget scelerisque tellus pharetra a.
-                        </div>
-                        <div class="tab-pane fade" id="contact4" role="tabpanel" aria-labelledby="contact-tab4">
-                          Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. Nam malesuada orci non ornare vulputate. Ut ut sollicitudin magna. Vestibulum eget ligula ut ipsum venenatis ultrices. Proin bibendum bibendum augue ut luctus.
-                        </div>
+                          @include('admin.setting.section.mail-setting')
+
+                          @include('admin.setting.section.seo-setting')
+
+
                       </div>
                     </div>
                   </div>

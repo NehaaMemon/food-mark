@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <label>Discount Type</label>
                         <select name="discount_type" class="form-control" id="">
-                            <option @selected($coupon->discount_type == 'percent') value="percent">Percent</option>
+                            <option @selected($coupon->discount_type == 'precent') value="precent">Percent</option>
                             <option @selected($coupon->discount_type == 'amount') value="amount">Amount({{ config('settings.site_default_currency_icon') }})</option>
                         </select>
                     </div>

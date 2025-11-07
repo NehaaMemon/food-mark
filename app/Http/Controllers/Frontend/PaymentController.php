@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Events\OrderPaymentUpdateEvent;
 use App\Events\OrderPlacedNotificationEvent;
+use App\Events\RTOrderPlacedNotificationEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Services\orderService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -166,6 +168,7 @@ class PaymentController extends Controller
 
             OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'PayPal');
             OrderPlacedNotificationEvent::dispatch($orderId);
+            RTOrderPlacedNotificationEvent::dispatch(Order::find($orderId));
             $orderService->clearSession();
             return redirect()->route('payment.success');
         } else {
@@ -230,6 +233,7 @@ class PaymentController extends Controller
 
            OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'Stripe');
             OrderPlacedNotificationEvent::dispatch($orderId);
+            RTOrderPlacedNotificationEvent::dispatch(Order::find($orderId));
             $orderService->clearSession();
             return redirect()->route('payment.success');
 
@@ -403,6 +407,7 @@ public function jazzcashResponse(Request $request, orderService $orderService)
 
         OrderPaymentUpdateEvent::dispatch($orderId, $paymentInfo, 'JazzCash');
         OrderPlacedNotificationEvent::dispatch($orderId);
+        RTOrderPlacedNotificationEvent::dispatch(Order::find($orderId));
         $orderService->clearSession();
 
         \Log::info('JazzCash Response: Payment successful for Order ID.', ['order_id' => $orderId, 'transection_id' => $paymentInfo['transection_id']]); // Debugging line

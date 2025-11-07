@@ -91,3 +91,23 @@ if(!function_exists('generateInvoiceId')){
     }
 
 }
+
+//get product discout in percenyage//
+if(!function_exists('discountInPercentage')){
+    function discountInPercentage($orignalprice, $offerprice){
+        $discount = (($orignalprice - $offerprice) / $orignalprice) * 100;
+        return round($discount , 2);
+
+
+    }
+
+    if(!function_exists('setSidebar')){
+        function setSidebar(array $route) {
+            if(request()->routeIs($route)){
+                return 'active';
+            }
+            return '';
+        }
+    }
+
+}

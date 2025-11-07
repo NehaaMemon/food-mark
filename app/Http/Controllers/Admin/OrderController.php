@@ -9,6 +9,7 @@ use App\DataTables\OrderDataTable;
 use App\DataTables\PendingOrderDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderPlacedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -32,13 +33,14 @@ class OrderController extends Controller
          function DeliveredOrders(DeliveredOrderDataTable $datatable) : View|JsonResponse{
           return $datatable->render('admin.orders.delivered-orders');
      }
-    
+
          function DeclinedOrders(DeclinedOrderDataTable $datatable) : View|JsonResponse{
           return $datatable->render('admin.orders.declined-orders');
      }
 
     function show($id) : View {
         $order = Order::findOrFail($id);
+        $notification = OrderPlacedNotification::where('order_id',$order->id)->update(['seen'=> 1]);
         return view('admin.orders.show',compact('order'));
 
     }

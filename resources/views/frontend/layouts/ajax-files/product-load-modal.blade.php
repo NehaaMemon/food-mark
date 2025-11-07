@@ -7,14 +7,16 @@
 </div>
 <div class="fp__cart_popup_text">
 <a href="{{ route('product.show', $product->slug) }}" class="title">{!! $product->name !!}</a>
-<p class="rating">
-    <i class="fas fa-star"></i>
-    <i class="fas fa-star"></i>
-    <i class="fas fa-star"></i>
-    <i class="fas fa-star-half-alt"></i>
-    <i class="far fa-star"></i>
-    <span>(201)</span>
-</p>
+@if ($product->reviews_avg_rating)
+    <p class="rating">
+        @for ($i = 1; $i <= $product->reviews_avg_rating; $i++)
+        <i class="fas fa-star"></i>
+        @endfor
+
+        <span>({{ $product->reviews_count }})</span>
+    </p>
+
+    @endif
 <h4 class="price">
     @if ($product->offer_price > 0)
     <input type="hidden" value="{{ $product->offer_price }}" name="base_price">
@@ -116,24 +118,34 @@
                 })
             })
             //function to update Product Size on selected price//
-            function updateProductPrice(){
-                let basePrice = parseFloat($('input[name="base_price"]').val());
-                let productSizePrice = 0;
-                let productOptionPrice = 0;
-                let quantity = parseFloat($('#quantity').val());
+   function updateProductPrice(){
+    let basePrice = parseFloat($('input[name="base_price"]').val()) ;
+    let productSizePrice = 0;
+    let productOptionPrice = 0;
+    let quantity = parseFloat($('#quantity').val()) ;
 
-                //calculate selected price of product //
-                let sizePrice = $('input[name="product_size"]:checked');
-                if(sizePrice.length > 0 ){
-                    productSizePrice = parseFloat(sizePrice.data("price"));
-            }
-            let OptionPrice = $('input[name="product_option[]"]:checked');
-            $(OptionPrice).each(function(){
-                productOptionPrice = parseFloat($(this).data("price"));
-            })
-          let totalPrice = (basePrice + productSizePrice + productOptionPrice) * quantity;
-           $('#total_price').text("{{ config('settings.site_default_currency_icon') }}" + totalPrice);
-        }
+    // selected size price
+    let sizePrice = $('input[name="product_size"]:checked');
+    if(sizePrice.length > 0){
+        productSizePrice = parseFloat(sizePrice.data("price")) ;
+    }
+
+    // selected option price (add all)
+    let OptionPrice = $('input[name="product_option[]"]:checked');
+    $(OptionPrice).each(function(){
+        productOptionPrice += parseFloat($(this).data("price"));
+    });
+
+    // total price calculation
+    let totalPrice = (basePrice + productSizePrice + productOptionPrice) * quantity;
+
+    // fix floating number issue
+    totalPrice = totalPrice.toFixed(2);
+
+    // update HTML
+    $('#total_price').text("{{ config('settings.site_default_currency_icon') }}" + totalPrice);
+}
+
         $('#modal_add_to_cart_form').on('submit',function(e){
             e.preventDefault();
 

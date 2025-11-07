@@ -10,7 +10,7 @@
                     <h1>menu Details</h1>
                     <ul>
                         <li><a href="{{ url('/') }}">home</a></li>
-                        <li><a href="javascript;:">menu Details</a></li>
+                        <li style="color: #F86F03"><a href="javascript;:">menu Details</a></li>
                     </ul>
                 </div>
             </div>
@@ -51,14 +51,16 @@
                 <div class="col-lg-7 wow fadeInUp" data-wow-duration="1s">
                     <div class="fp__menu_details_text">
                         <h2>{!! $product->name !!}</h2>
+                          @if ($product->reviews_avg_rating)
                         <p class="rating">
+                            @for ($i = 1; $i <= $product->reviews_avg_rating; $i++)
                             <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <i class="far fa-star"></i>
-                            <span>(201)</span>
+                            @endfor
+
+                            <span>({{ $product->reviews_count }})</span>
                         </p>
+
+                        @endif
                         <h3 class="price">
                             @if ($product->offer_price > 0)
                                 {{ currencyPosition($product->offer_price) }}
@@ -156,114 +158,72 @@
                                 aria-labelledby="pills-home-tab" tabindex="0">
                                 <div class="menu_det_description">
                                     {!! $product->long_description !!}
-                                    ullam in? Beatae, dolorum ad ea deleniti ratione voluptatum similique omnis
-                                    voluptas tempora optio soluta vero veritatis reiciendis blanditiis architecto.
-                                    Debitis nesciunt inventore voluptate tempora ea incidunt iste, corporis, quo
-                                    cumque facere doloribus possimus nostrum sed magni quasi, assumenda autem!
-                                    Repudiandae nihil magnam provident illo alias vero odit repellendus, ipsa nemo
-                                    itaque. Aperiam fuga, magnam quia illum minima blanditiis tempore.</p>
+
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-contact" role="tabpanel"
                                 aria-labelledby="pills-contact-tab" tabindex="0">
                                 <div class="fp__review_area">
                                     <div class="row">
-                                        <div class="col-lg-8">
-                                            <h4>04 reviews</h4>
+                                        <div class="col-lg-6">
+                                            <h4> {{ count($reviews) }} Reviews</h4>
                                             <div class="fp__comment pt-0 mt_20">
+                                                @foreach ($reviews as $review)
                                                 <div class="fp__single_comment m-0 border-0">
-                                                    <img src="images/comment_img_1.png" alt="review" class="img-fluid">
+                                                    <img src="{{ asset($review->user->avatar) }}" alt="review" class="img-fluid">
                                                     <div class="fp__single_comm_text">
-                                                        <h3>Michel Holder <span>29 oct 2022 </span></h3>
+                                                        <h3>{{ $review->user->name }} <span>{{ date('d m Y',strtotime($review->created_at)) }} </span></h3>
                                                         <span class="rating">
+                                                            @for ($i = 1; $i<=$review->rating;$i++)
                                                             <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fad fa-star-half-alt"></i>
-                                                            <i class="fal fa-star"></i>
-                                                            <b>(120)</b>
+                                                            @endfor
                                                         </span>
-                                                        <p>Sure there isn't anything embarrassing hiidden in the
-                                                            middles of text. All erators on the Internet
-                                                            tend to repeat predefined chunks</p>
+                                                        <p>{{ $review->review }}</p>
                                                     </div>
                                                 </div>
-                                                <div class="fp__single_comment">
-                                                    <img src="images/chef_1.jpg" alt="review" class="img-fluid">
-                                                    <div class="fp__single_comm_text">
-                                                        <h3>salina khan <span>29 oct 2022 </span></h3>
-                                                        <span class="rating">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fad fa-star-half-alt"></i>
-                                                            <i class="fal fa-star"></i>
-                                                            <b>(120)</b>
-                                                        </span>
-                                                        <p>Sure there isn't anything embarrassing hiidden in the
-                                                            middles of text. All erators on the Internet
-                                                            tend to repeat predefined chunks</p>
+                                                @endforeach
+                                                @if ($reviews->hasPages())
+                                                <div class="fp__pagination mt_60">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            {{ $reviews->links() }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="fp__single_comment">
-                                                    <img src="images/comment_img_2.png" alt="review" class="img-fluid">
-                                                    <div class="fp__single_comm_text">
-                                                        <h3>Mouna Sthesia <span>29 oct 2022 </span></h3>
-                                                        <span class="rating">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fad fa-star-half-alt"></i>
-                                                            <i class="fal fa-star"></i>
-                                                            <b>(120)</b>
-                                                        </span>
-                                                        <p>Sure there isn't anything embarrassing hiidden in the
-                                                            middles of text. All erators on the Internet
-                                                            tend to repeat predefined chunks</p>
-                                                    </div>
-                                                </div>
-                                                <div class="fp__single_comment">
-                                                    <img src="images/chef_3.jpg" alt="review" class="img-fluid">
-                                                    <div class="fp__single_comm_text">
-                                                        <h3>marjan janifar <span>29 oct 2022 </span></h3>
-                                                        <span class="rating">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fad fa-star-half-alt"></i>
-                                                            <i class="fal fa-star"></i>
-                                                            <b>(120)</b>
-                                                        </span>
-                                                        <p>Sure there isn't anything embarrassing hiidden in the
-                                                            middles of text. All erators on the Internet
-                                                            tend to repeat predefined chunks</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" class="load_more">load More</a>
-                                            </div>
+                                                @endif
+                                                @if (count($reviews) === 0)
 
+                                                <div class="alert alert-warning mt-5">No review found</div>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-lg-4">
+                                        @auth
+                                        <div class="col-lg-5">
                                             <div class="fp__post_review">
                                                 <h4>write a Review</h4>
-                                                <form>
-                                                    <p class="rating">
-                                                        <span>select your rating : </span>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                    </p>
+                                                <form method="POST" action="{{ route('product-review.store') }}">
+                                                    @csrf
                                                     <div class="row">
+
                                                         <div class="col-xl-12">
-                                                            <input type="text" placeholder="Name">
+                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                            <p class="rating">
+                                                                <span>select your rating : </span>
+                                                                <div class="rating" data-rating="0">
+                                                                    <i class="far fa-star" data-value="1"></i>
+                                                                    <i class="far fa-star" data-value="2"></i>
+                                                                    <i class="far fa-star" data-value="3"></i>
+                                                                    <i class="far fa-star" data-value="4"></i>
+                                                                    <i class="far fa-star" data-value="5"></i>
+                                                                </div>
+
+
+                                                                <input type="hidden" name="rating" id="rating-value" value="0">
+                                                            </p>
+
                                                         </div>
                                                         <div class="col-xl-12">
-                                                            <input type="email" placeholder="Email">
-                                                        </div>
-                                                        <div class="col-xl-12">
-                                                            <textarea rows="3" placeholder="Write your review"></textarea>
+                                                            <textarea rows="3" placeholder="Write your review" name="review"></textarea>
                                                         </div>
                                                         <div class="col-12">
                                                             <button class="common_btn" type="submit">submit
@@ -273,6 +233,13 @@
                                                 </form>
                                             </div>
                                         </div>
+                                       @else
+                                        <div class="col-lg-4">
+                                            <div class="alert alert-warning mt-5">
+                                             Please Login for submit your review
+                                            </div>
+                                        </div>
+                                        @endauth
                                     </div>
                                 </div>
                             </div>
@@ -293,14 +260,16 @@
                                         <a class="category" href="#">{{ @$relatedproduct->name }}</a>
                                     </div>
                                     <div class="fp__menu_item_text">
+                                       @if ($relatedproduct->reviews_avg_rating)
                                         <p class="rating">
+                                            @for ($i = 1; $i <= $relatedproduct->reviews_avg_rating; $i++)
                                             <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                            <i class="far fa-star"></i>
-                                            <span>74</span>
+                                            @endfor
+
+                                            <span>({{ $relatedproduct->reviews_count }})</span>
                                         </p>
+
+                                        @endif
                                         <a class="title"
                                             href="{{ route('product.show', $relatedproduct->slug) }}">{!! $relatedproduct->name !!}</a>
                                         <h5 class="price">
@@ -385,6 +354,8 @@
                     productOptionPrice = parseFloat($(this).data("price"));
                 })
                 let totalPrice = (basePrice + productSizePrice + productOptionPrice) * quantity;
+                totalPrice = totalPrice.toFixed(2);
+
                 $('#v_total_price').text("{{ config('settings.site_default_currency_icon') }}" + totalPrice);
             }
             //Add to cart Function//
@@ -434,6 +405,24 @@
 
                 })
             })
+            document.querySelectorAll('.rating i').forEach(star => {
+    star.addEventListener('click', function() {
+        const rating = this.getAttribute('data-value');
+        document.getElementById('rating-value').value = rating;
+        const stars = this.parentNode.querySelectorAll('i');
+
+        stars.forEach(s => {
+            if (s.getAttribute('data-value') <= rating) {
+                s.classList.remove('far');
+                s.classList.add('fas');
+            } else {
+                s.classList.remove('fas');
+                s.classList.add('far');
+            }
+        });
+    });
+});
+
         })
     </script>
 @endpush

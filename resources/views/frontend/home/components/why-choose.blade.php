@@ -3,12 +3,9 @@
         <div class="row wow fadeInUp" data-wow-duration="1s">
             <div class="col-md-8 col-lg-7 col-xl-6 m-auto text-center">
                 <div class="fp__section_heading mb_25">
-                    <h4>{!! @$titleSection['why_choose_us_top_title'] !!}</h4>
-                    <h2>{!! @$titleSection['why_choose_us_main_title'] !!}</h2>
-                    <span>
-                        <img src="{{ asset('frontend/images/heading_shapes.png') }}" alt="shapes"
-                            class="img-fluid w-100">
-                    </span>
+                    <h4><i class="fas fa-utensils icon"></i> {!! @$titleSection['why_choose_us_top_title'] !!}</h4>
+                    <h2 style="color: black">{!! @$titleSection['why_choose_us_main_title'] !!}</h2>
+
                     <p>{!! @$titleSection['why_choose_us_sub_title'] !!}</p>
                 </div>
             </div>
@@ -29,4 +26,10 @@
             @endforeach
         </div>
     </div>
+     <img src="{{ asset('frontend/images/pizzaShape1_2.png') }}" loading="lazy" alt="shape"
+       class="shape burger-shape move-anim">
+          <img src="{{ asset('frontend/images/burgerShape1_1.png') }}" loading="lazy" alt="shape"
+       class="shape pizza-shape move-anim">
 </section>
+
+

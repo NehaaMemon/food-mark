@@ -12,6 +12,8 @@ use App\Http\Controllers\Frontend\DashboardController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\PaymentController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\WishlistController;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,14 +60,26 @@ require __DIR__.'/auth.php';
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 
+
+// product Page //
+Route::get('/products',[FrontendController::class, 'products'])->name('product.index');
+
 //Show product Page //
 
 Route::get('/product/{slug}',[FrontendController::class, 'showProduct'])->name('product.show');
 
 //Show product load Page //
-Route::get('/load-product-modal/{productId}',[FrontendController::class, 'loadProductModal'])->name('load-product-Modal');
+Route::get('/load-product-modal/{productId}',[FrontendController::class, 'loadProductModal'])
+->name('load-product-Modal');
+Route::post('/product-review',[FrontendController::class, 'productReviewStore'])
+->name('product-review.store');
+
+
 //Add to cart //
 Route::post('add-to-cart',[CartController::class,'addtocart'])->name('add-to-cart');
+
+//Wishlist //
+Route::get('/wishlist/{productId}',[WishlistController::class,'store'])->name('wishlist.store');
 
 //Update cart product //
 Route::get(('cart-update-products'),[CartController::class,'getCartProduct'])->name('cart-update-products');
@@ -118,9 +132,27 @@ Route::post('jazzcash/response', [PaymentController::class, 'jazzcashResponse'])
 Route::get('jazzcash/success', [PaymentController::class, 'jazzcashSuccess'])->name('jazzcash.success');
 Route::get('jazzcash/cancel', [PaymentController::class, 'jazzcashCancel'])->name('jazzcash.cancel');
 
+//About Routes//
+Route::get('/about', [FrontendController::class, 'about'])->name('about');
+
+//Chef Routes//
+Route::get('/chef', [FrontendController::class, 'chef'])->name('chef');
+
+//gallery Routes//
+Route::get('/gallery', [FrontendController::class, 'gallery'])->name('gallery');
+
+//Contact Routes//
+Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+Route::post('/contact', [FrontendController::class, 'contactSendMessage'])
+->name('contact.send-message');
+
+//Reservation Routes//
+Route::post('/reservation', [FrontendController::class, 'reservation'])
+->name('reservation.store');
+
+//news-letter Routes//
+Route::post('/subscribe-newsletter', [FrontendController::class, 'subscribeNewsletter'])
+->name('subscribe-newsletter');
 
 
-    Route::get('test',function(){
-       RTOrderPlacedNotificationEvent::dispatch('hello there');
-    });
 });

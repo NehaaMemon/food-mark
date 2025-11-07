@@ -3,7 +3,7 @@
         <div class="row add_slider wow fadeInUp" data-wow-duration="1s">
             <div class="col-xl-4">
                 <a href="#" class="fp__add_slider_single"
-                    style="background: url(images/offer_slider_3.png);">
+                    style="background: url({{ asset('frontend/images/offer_slider_3.png') }});">
                     <div class="text">
                         <h3>red chicken</h3>
                         <p>Lorem ipsum dolor sit amet consectetur.</p>
@@ -12,7 +12,7 @@
             </div>
             <div class="col-xl-4">
                 <a href="#" class="fp__add_slider_single"
-                    style="background: url(images/offer_slider_2.png);">
+                    style="background: url({{ asset('frontend/images/offer_slider_2.png') }});">
                     <div class="text">
                         <h3>red chicken</h3>
                         <p>Lorem ipsum dolor sit amet consectetur.</p>
@@ -21,7 +21,7 @@
             </div>
             <div class="col-xl-4">
                 <a href="#" class="fp__add_slider_single"
-                    style="background: url(images/offer_slider_1.png);">
+                    style="background: url({{ asset('frontend/images/offer_slider_1.png') }});">
                     <div class="text">
                         <h3>red chicken</h3>
                         <p>Lorem ipsum dolor sit amet consectetur.</p>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-xl-4">
                 <a href="#" class="fp__add_slider_single"
-                    style="background: url(images/offer_slider_4.png);">
+                    style="background: url({{ asset("frontend/images/offer_slider_4.png") }});">
                     <div class="text">
                         <h3>red chicken</h3>
                         <p>Lorem ipsum dolor sit amet consectetur.</p>

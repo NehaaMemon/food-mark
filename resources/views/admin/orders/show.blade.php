@@ -38,7 +38,8 @@
                                 <div class="col-md-6 text-md-right">
                                     <address>
                                         <strong>Order Date:</strong><br>
-                                        September 19, 2018{{ date('F d,Y \ H:i', strtotime($order->created_by)) }}
+                                      {{ date('F d, Y  h:i A', strtotime($order->created_by)) }}
+
                                         <br><br>
                                     </address>
                                 </div>
@@ -86,8 +87,8 @@
                                     <tr>
                                         <th data-width="40">#</th>
                                         <th>Item</th>
-                                        <th>Product Size</th>
-                                        <th>Product Option</th>
+                                        <th>Product Size </th>
+                                         <th>Product option</th>
                                         <th class="text-center">Price</th>
                                         <th class="text-center">Quantity</th>
                                         <th class="text-right">Totals</th>
@@ -111,10 +112,20 @@
                                         <tr>
                                             <td>{{ ++$loop->index }}</td>
                                             <td>{{ $orderItem->product_name }}</td>
-                                            <td>{{ @$size->name }}- {{ currencyPosition($size->price) }}</td>
-                                            @foreach ($option as $options)
-                                                <td>{{ @$options->name }} - {{ currencyPosition($options->price) }}</td>
-                                            @endforeach
+                                          @if(!empty($size))
+                                                <td>{{ @$size->name ?? '-' }} - {{ currencyPosition(@$size->price ?? 0) }}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
+
+                                            {{-- Options Column --}}
+                                            @if(!empty($option) && count($option) > 0)
+                                                @foreach ($option as $options)
+                                                    <td>{{ @$options->name ?? '-' }} - {{ currencyPosition(@$options->price ?? 0) }}</td>
+                                                @endforeach
+                                            @else
+                                                <td>-</td>
+                                            @endif
                                             <td class="text-center">{{ currencyPosition($orderItem->unit_price) }}</td>
                                             <td class="text-center">{{ $orderItem->qty }}</td>
                                             <td class="text-right">{{ currencyPosition($prototal) }}</td>
